@@ -1,17 +1,25 @@
-#get the data
-dt <- read.csv("C:/Users/David/Documents/household_power_consumption.txt",sep=";",as.is = TRUE)
-dt_1 <- dt
-dt_1$Time<- strptime(paste(dt_1$Date,dt_1$Time),"%d/%m/%Y %H:%M:%S")
+data <- read.csv("household_power_consumption.txt",sep=";",na.strings="?",
+                 colClasses=c(Date="character",Time="character"))
 
-dt_1$Date <- as.Date(dt_1$Date,"%d/%m/%Y")
+data$Date<-as.Date(data$Date,"%d/%m/%Y")
+data$DateTime <-as.POSIXct(strptime(paste(data$Date,data$Time), "%Y-%m-%d %H:%M:%S"))
+data2 <- data[data$Date==as.Date("2007-02-01") | data$Date==as.Date("2007-02-02") ,]
+#par(mfrow = c(1, 1)) 
+png(file="plot3.png",width = 480, height = 480)
+with(data2,plot(DateTime,Sub_metering_1
+                ,type="l"
+                , xlab=""
+                ,ylab = "Energy sub metering"
+                
+))
 
-x_1 <- as.numeric(dt_3$Sub_metering_1)
-x_2 <- as.numeric(dt_3$Sub_metering_2)
-x_3 <- as.numeric(dt_3$Sub_metering_3)
-y<-dt_3$Time
+with(data2, points(DateTime, Sub_metering_2, col = "red",type="l"))
+with(data2, points(DateTime, Sub_metering_3, col = "blue",type="l"))
+legend("topright", pch = 1, col = c("black", "red", "blue")
+       , legend = c("Sub_metering_1", "Sub_metering_2","Sub_metering_3")
+  
 
-plot(y,x_1,type="l",ylab = "Energy Sub metering", xlab="",col = "black")
-lines(y, x_2 , col = "red")
-lines(y, x_3 , col = "blue")
+       )
 
-legend("topright",c("Sub_Metering_1","Sub_Metering_2","Sub_Metering_3"),lty=c(1,1),lwd=c(2.5,2.5),col=c("black","red","blue"))
+
+dev.off() ## Don't forget to close the PNG device!
