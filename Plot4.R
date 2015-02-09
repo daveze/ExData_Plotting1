@@ -4,7 +4,7 @@ data <- read.csv("household_power_consumption.txt",sep=";",na.strings="?",
 data$Date<-as.Date(data$Date,"%d/%m/%Y")
 data$DateTime <-as.POSIXct(strptime(paste(data$Date,data$Time), "%Y-%m-%d %H:%M:%S"))
 data2 <- data[data$Date==as.Date("2007-02-01") | data$Date==as.Date("2007-02-02") ,]
-
+png(file="plot4.png",width = 480, height = 480)
 par(mfrow = c(2, 2)) # 2 row 2 columns
 with(data2,plot(DateTime,Global_active_power
                 ,type="l"
@@ -23,7 +23,7 @@ with(data2,plot(DateTime,Sub_metering_1
           , xlab=""
           ,ylab = "Energy sub metering"
 ))
-
+                 
 with(data2, points(DateTime, Sub_metering_2, col = "red",type="l"))
 with(data2, points(DateTime, Sub_metering_3, col = "blue",type="l"))
 legend("topright", pch = 1, col = c("black", "red", "blue")
@@ -34,5 +34,8 @@ legend("topright", pch = 1, col = c("black", "red", "blue")
 with(data2,plot(DateTime,Global_reactive_power
                 ,type="l"
                 , xlab="datetime"
-
+                
 ))
+
+
+dev.off() ## Don't forget to close the PNG device!
